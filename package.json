@@ -1,7 +1,7 @@
 {
   "name": "nyce",
   "version": "0.0.1",
-  "description": "Component interface definition utility",
+  "description": "Component interface definition and adherence utility",
   "main": "index.js",
   "repository": {
     "type": "git",
