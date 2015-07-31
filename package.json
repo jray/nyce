@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Component interface definition utility",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jray/nyce.git"
+  },
   "scripts": {
     "test": "node test/test.js"
   },
