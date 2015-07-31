@@ -1,0 +1,23 @@
+{
+  "name": "nyce",
+  "version": "0.0.1",
+  "description": "Component interface definition utility",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "component",
+    "interface",
+    "types"
+  ],
+  "author": "Johnny Ray Austin <johnny@johnnyray.me>",
+  "license": "MIT",
+  "devDependencies": {
+    "tape": "^4.0.1"
+  },
+  "dependencies": {
+    "bluebird": "^2.9.34",
+    "joi": "^6.6.1"
+  }
+}
