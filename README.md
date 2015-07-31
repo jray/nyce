@@ -1,7 +1,7 @@
 
 # nyce
 
-### Component interface definition and adherence utility
+### JavaScript component interface definition and adherence utility
 
 ```javascript
 var nyce        = require( 'nyce' )();
