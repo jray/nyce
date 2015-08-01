@@ -15,6 +15,10 @@ module.exports = function( ) {
       return Object.keys( _interfaces );
     },
 
+    isDefined: function( name ) {
+      return ( Object.keys( _interfaces ).indexOf( name ) > -1 );
+    },
+
     checkIfImplements: function( type, potentialImpl ) {
       var resolver = P.pending();
       var schema   = _interfaces[ type ];

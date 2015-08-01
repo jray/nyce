@@ -1,6 +1,6 @@
 {
   "name": "nyce",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "JavaScript component interface definition and adherence utility",
   "main": "index.js",
   "repository": {
