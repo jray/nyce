@@ -11,6 +11,10 @@ module.exports = function( ) {
 
   var _api = {
 
+    defined: function() {
+      return Object.keys( _interfaces );
+    },
+
     checkIfImplements: function( type, potentialImpl ) {
       var resolver = P.pending();
       var schema   = _interfaces[ type ];

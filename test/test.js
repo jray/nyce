@@ -67,7 +67,7 @@ test('Successfully invalidates an invalid interface', function( t ) {
   var testInterface = mock( 'interface' );
   var testModule    = mock( 'implementation' );
   var foo           = nyce();
-
+m
   // remove a required field from the interface
   delete testModule.meta;
   testModule.met = {};
