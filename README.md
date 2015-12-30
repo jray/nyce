@@ -11,7 +11,7 @@ exports.aProp = {};
 
 // elsewhere
 const nyce = require('nyce')();
-const someModule = require('./lib/foo');
+const someModule = require('./someModule');
 
 const myInterface = {
   index: {
