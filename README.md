@@ -30,7 +30,7 @@ const myInterface = {
 
 nyce
   .define('resource', myInterface)
-  .then(nyce.checkIfImplements('resource', someModule))
+  .then(nyce.assertImplements('resource', someModule))
   .then(() => {
     console.log( 'yay!' );
   })

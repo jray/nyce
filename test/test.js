@@ -56,7 +56,7 @@ test('Successfully validate a valid interface', (t) => {
   nyce
     .define('resource2', testInterface)
     .then(() => {
-      return nyce.checkIfImplements('resource2', testModule);
+      return nyce.assertImplements('resource2', testModule);
     })
     .then((val) => {
       t.ok(val, 'Got val back');
@@ -81,7 +81,7 @@ test('Successfully throws error when number of arguments dont match', (t) => {
   nyce
     .define('resource2', testInterface)
     .then(() => {
-      return nyce.checkIfImplements('resource2', testModule);
+      return nyce.assertImplements('resource2', testModule);
     })
     .then(() => {
       t.fail('validation should fail I shouldnt be here.');
@@ -108,7 +108,7 @@ test('Successfully throws error when specific arguments dont match', (t) => {
   nyce
     .define('resource2', testInterface)
     .then(() => {
-      return nyce.checkIfImplements('resource2', testModule);
+      return nyce.assertImplements('resource2', testModule);
     })
     .then(() => {
       t.fail('validation should fail I shouldnt be here.');
@@ -134,7 +134,7 @@ test('Successfully invalidates an invalid interface', (t) => {
   nyce
     .define('resource3', testInterface)
     .then((schema) => {
-      return nyce.checkIfImplements('resource3', testModule);
+      return nyce.assertImplements('resource3', testModule);
     })
     .then(() => {
       t.fail('Should not have successully validate this module');

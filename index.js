@@ -18,16 +18,14 @@ module.exports = () => {
         return (Object.keys(this._interfaces).indexOf(name) > -1);
       },
 
-      checkIfImplements(type, potentialImpl) {
+      assertImplements(type, potentialImpl) {
         const resolver = P.pending();
         const schema = this._interfaces[ type ];
 
         if (schema) {
           return validate(potentialImpl, schema);
         } else {
-          process.nextTick(function(){
-            resolver.reject(`Unknown Type: '${type}'`);
-          });
+          process.nextTick(() => resolver.reject(`Unknown Type: '${type}'`));
         }
         return resolver.promise;
       },
@@ -46,12 +44,10 @@ module.exports = () => {
           schemaBuilder(definition)
             .then((schema) => {
               self._interfaces[ name ] = schema;
-
               resolver.resolve(schema);
             })
             .catch((e) => resolver.reject(e));
         }
-
         return resolver.promise;
       }
     }
