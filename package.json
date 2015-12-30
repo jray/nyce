@@ -1,11 +1,11 @@
 {
   "name": "nyce",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "JavaScript component interface definition and adherence utility",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jray/nyce.git"
+    "url": "git://github.com/recursivefunk/nyce.git"
   },
   "scripts": {
     "test": "node test/test.js"
@@ -22,6 +22,12 @@
   },
   "dependencies": {
     "bluebird": "^2.9.34",
-    "joi": "^6.6.1"
+    "joi": "^7.1.0",
+    "stampit": "^2.1.1"
+  },
+  "engineStrict": true,
+  "engines": {
+    "npm": "3.3.3",
+    "node": "4.2.1"
   }
 }

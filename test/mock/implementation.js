@@ -3,4 +3,4 @@
 
 exports.index = function( foo, bar ) {};
 
-exports.meta = {};
+exports.foo = {};

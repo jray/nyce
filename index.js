@@ -1,61 +1,63 @@
 
 'use strict';
 
-var P             = require( 'bluebird' );
-var schemaBuilder = require( './lib/schemaBuilder' );
-var validate      = require( './lib/validate' );
+const P = require('bluebird');
+const component = require('stampit');
+const schemaBuilder = require('./lib/schemaBuilder');
+const validate = require('./lib/validate');
 
-module.exports = function( ) {
+module.exports = () => {
 
-  var _interfaces = {};
+  return component({
+    methods: {
+      defined() {
+        return Object.keys(this._interfaces);
+      },
 
-  var _api = {
+      isDefined(name) {
+        return (Object.keys(this._interfaces).indexOf(name) > -1);
+      },
 
-    defined: function() {
-      return Object.keys( _interfaces );
-    },
+      checkIfImplements(type, potentialImpl) {
+        const resolver = P.pending();
+        const schema = this._interfaces[ type ];
 
-    isDefined: function( name ) {
-      return ( Object.keys( _interfaces ).indexOf( name ) > -1 );
-    },
+        if (schema) {
+          return validate(potentialImpl, schema);
+        } else {
+          process.nextTick(function(){
+            resolver.reject(`Unknown Type: '${type}'`);
+          });
+        }
+        return resolver.promise;
+      },
 
-    checkIfImplements: function( type, potentialImpl ) {
-      var resolver = P.pending();
-      var schema   = _interfaces[ type ];
+      define(name, definition) {
+        const self = this;
+        const resolver = P.pending();
 
-      if ( schema ) {
-        return validate( potentialImpl, schema );
-      } else {
-        process.nextTick(function(){
-          resolver.reject( 'Unknown Type: \'%s\'', type );
-        });
+        if (this._interfaces[ name ]) {
+          process.nextTick(() => {
+            resolver.reject(
+              `You are attempting to redefine interface '${name}'`
+            );
+          });
+        } else {
+          schemaBuilder(definition)
+            .then((schema) => {
+              self._interfaces[ name ] = schema;
+
+              resolver.resolve(schema);
+            })
+            .catch((e) => resolver.reject(e));
+        }
+
+        return resolver.promise;
       }
-
-      return resolver.promise;
-    },
-
-    define: function( name, definition ) {
-      var resolver = P.pending();
-      var schema;
-
-      if ( _interfaces[ name ] ) {
-        resolver.reject(
-          'You are attempting to redefine interface \'' + name + '\''
-        );
-      }
-
-      schema = schemaBuilder( definition );
-
-      _interfaces[ name ] = schema;
-
-      process.nextTick(function(){
-        resolver.resolve( schema );
-      });
-
-      return resolver.promise;
     }
-  };
-
-  return _api;
+  })
+  .refs({
+    _interfaces: {}
+  }).create();
 
 };

@@ -5,12 +5,10 @@
 module.exports = function( opts ) {
   return {
     index: {
-      required: true,
       type: 'function',
       args: [ 'foo', 'bar' ]
     },
-    meta: {
-      required: true,
+    foo: {
       type: 'object'
     }
   };

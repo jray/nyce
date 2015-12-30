@@ -1,89 +1,150 @@
 
 'use strict';
 
-var test      = require( 'tape' );
-var mock      = require( './mock' );
-var nyce      = require( '../index' );
-var validate  = require( '../lib/validate' );
+const test = require('tape');
+const mock = require('./mock');
+const Nyce = require('../index');
+const validate = require('../lib/validate');
+const utils = require('../lib/utils');
 
-test('Successfully define an interface', function( t ) {
-  var testInterface = mock( 'interface' );
-  nyce()
-    .define( 'resource', testInterface )
-    .then(function() {
-      t.pass();
+test('Successfully parses function signature', (t) => {
+  const sig = utils.parseFuncSig((foo, bar) => {});
+  t.end();
+})
+
+test('Successfully define an interface', (t) => {
+  const testInterface = mock('interface');
+  Nyce()
+    .define('resource', testInterface)
+    .then(() => {
+      t.pass('define resource executes successfully');
       t.end();
     })
-    .catch(function(e) {
-      t.fail( e );
+    .catch((e) => {
+      t.fail(e.message);
       t.end();
     });
 });
 
-test('Fail to redefine an interface', function( t ) {
-  var testInterface = mock( 'interface' );
-  var foo = nyce();
+test('Fail to redefine an interface', (t) => {
+  const testInterface = mock('interface');
+  const nyce = Nyce();
 
-  foo
-    .define( 'resource', testInterface )
-    .then(function() {
-      return foo
-        .define( 'resource', testInterface );
+  nyce
+    .define('resource', testInterface)
+    .then(() => {
+      return nyce.define('resource', testInterface);
     })
-    .catch(function(e) {
-      t.pass( e );
-      t.end();
-    });
-
-});
-
-test('Successfully validate a valid interface', function( t ) {
-
-  t.plan( 1 );
-
-  var testInterface = mock( 'interface' );
-  var testModule    = mock( 'implementation' );
-  var foo           = nyce();
-
-  foo
-    .define( 'resource2', testInterface )
-    .then(function( schema ) {
-      return foo.checkIfImplements( 'resource2', testModule );
+    .then(() => {
+      t.fail('redefining interfaces should fail I shouldn\'t be here.');
     })
-    .then(function( val ) {
-      t.ok( val, 'Got val back' );
-    })
-    .catch(function(e) {
-      t.fail( e );
+    .catch((e) => {
+      t.pass(e);
       t.end();
     });
 
 });
 
-test('Successfully invalidates an invalid interface', function( t ) {
+test('Successfully validate a valid interface', (t) => {
 
-  t.plan( 2 );
+  t.plan(1);
 
-  var testInterface = mock( 'interface' );
-  var testModule    = mock( 'implementation' );
-  var foo           = nyce();
+  const testInterface = mock('interface');
+  const testModule = mock('implementation');
+  const nyce = Nyce();
+
+  nyce
+    .define('resource2', testInterface)
+    .then(() => {
+      return nyce.checkIfImplements('resource2', testModule);
+    })
+    .then((val) => {
+      t.ok(val, 'Got val back');
+    })
+    .catch((e) => {
+      t.fail(e.message);
+      t.end();
+    });
+
+});
+
+test('Successfully throws error when number of arguments dont match', (t) => {
+
+  t.plan(2);
+
+  const testInterface = mock('interface');
+  const testModule = mock('implementation');
+  const nyce = Nyce();
+
+  testModule.index = (foo) => {};
+
+  nyce
+    .define('resource2', testInterface)
+    .then(() => {
+      return nyce.checkIfImplements('resource2', testModule);
+    })
+    .then(() => {
+      t.fail('validation should fail I shouldnt be here.');
+      t.end();
+    })
+    .catch((e) => {
+      t.ok(e);
+      t.equal(e.message, 'The number of arguments for function "index" (1) is not the same as expected (2)'); // jshint ignore: line
+      t.end();
+    });
+});
+
+test('Successfully throws error when specific arguments dont match', (t) => {
+
+  t.plan(2);
+
+  const testInterface = mock('interface');
+  const testModule = mock('implementation');
+  const nyce = Nyce();
+
+  testModule.index = (foo, boop) => {}; // jshint ignore: line
+  testInterface.index.enforceArgNaming = true;
+
+  nyce
+    .define('resource2', testInterface)
+    .then(() => {
+      return nyce.checkIfImplements('resource2', testModule);
+    })
+    .then(() => {
+      t.fail('validation should fail I shouldnt be here.');
+      t.end();
+    })
+    .catch((e) => {
+      t.ok(e);
+      t.equal(e.message, `Signature for function "index" does not match expected "foo,bar" but found "foo,boop"`); // jshint ignore: line
+      t.end();
+    });
+});
+
+test('Successfully invalidates an invalid interface', (t) => {
+
+  t.plan(2);
+
+  const testInterface = mock('interface');
+  const testModule = mock('implementation');
+  const nyce = Nyce();
   // remove a required field from the interface
-  delete testModule.meta;
-  testModule.met = {};
+  delete testModule.foo;
 
-  foo
-    .define( 'resource3', testInterface )
-    .then(function( schema ) {
-      return foo.checkIfImplements( 'resource3', testModule );
+  nyce
+    .define('resource3', testInterface)
+    .then((schema) => {
+      return nyce.checkIfImplements('resource3', testModule);
     })
-    .then(function() {
-      t.fail( 'Should not have successully validate this module' );
+    .then(() => {
+      t.fail('Should not have successully validate this module');
       t.end();
     })
-    .catch(function( e ) {
-      var msg = 'child "meta" fails because ["meta" is required]';
-      t.ok( e, e );
-      t.equal( e.message, msg );
+    .catch((e) => {
+      const msg = 'child "foo" fails because ["foo" is required]';
+      t.ok(e, e);
+      t.equal(e.message, msg);
+      t.end();
     });
 
 });
