@@ -4,13 +4,14 @@
 const test = require('tape');
 const mock = require('./mock');
 const Nyce = require('../index');
-const validate = require('../lib/validate');
 const utils = require('../lib/utils');
 
 test('Successfully parses function signature', (t) => {
   const sig = utils.parseFuncSig((foo, bar) => {});
+  t.equal(sig[0], 'foo');
+  t.equal(sig[1], 'bar');
   t.end();
-})
+});
 
 test('Successfully define an interface', (t) => {
   const testInterface = mock('interface');
@@ -117,6 +118,31 @@ test('Successfully throws error when specific arguments dont match', (t) => {
     .catch((e) => {
       t.ok(e);
       t.equal(e.message, `Signature for function "index" does not match expected "foo,bar" but found "foo,boop"`); // jshint ignore: line
+      t.end();
+    });
+});
+
+test('Successfully ignores unknown props', (t) => {
+
+  t.plan(1);
+
+  const testInterface = mock('interface');
+  const testModule = mock('implementation');
+  const nyce = Nyce();
+
+  testModule.ignoreMe = (foo, boop) => {}; // jshint ignore: line
+
+  nyce
+    .define('resource2', testInterface)
+    .then(() => {
+      return nyce.assertImplements('resource2', testModule);
+    })
+    .then(() => {
+      t.pass('validation was valid when unknown properties exist.');
+      t.end();
+    })
+    .catch((e) => {
+      t.fail(e.message);
       t.end();
     });
 });
