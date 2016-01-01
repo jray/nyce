@@ -80,9 +80,9 @@ test('Successfully throws error when number of arguments dont match', (t) => {
   testModule.index = (foo) => {};
 
   nyce
-    .define('resource2', testInterface)
+    .define('resource3', testInterface)
     .then(() => {
-      return nyce.assertImplements('resource2', testModule);
+      return nyce.assertImplements('resource3', testModule);
     })
     .then(() => {
       t.fail('validation should fail I shouldnt be here.');
@@ -95,12 +95,41 @@ test('Successfully throws error when number of arguments dont match', (t) => {
     });
 });
 
+test('Successfully validates when arguments dont match but no args option is present', (t) => {
+
+  t.plan(1);
+
+  const testInterface = mock('interface');
+  const testModule = mock('implementation');
+  const nyce = Nyce();
+
+  testModule.index = (foo) => {};
+  delete testInterface.index.args;
+
+  nyce
+    .define('resource4', testInterface)
+    .then(() => {
+      return nyce.assertImplements('resource4', testModule);
+    })
+    .then(() => {
+      t.pass('validation should succeed because we ignore arguments.');
+      t.end();
+    })
+    .catch((e) => {
+      t.fail(e.message);
+      t.end();
+    });
+});
+
 test('Successfully throws error when specific arguments dont match', (t) => {
 
   t.plan(2);
 
   const testInterface = mock('interface');
-  const testModule = mock('implementation');
+  const testModule = {
+    index: function(foo, boop) {},
+    foo: {}
+  };
   const nyce = Nyce();
 
   testModule.index = (foo, boop) => {}; // jshint ignore: line
@@ -127,15 +156,18 @@ test('Successfully ignores unknown props', (t) => {
   t.plan(1);
 
   const testInterface = mock('interface');
-  const testModule = mock('implementation');
-  const nyce = Nyce();
+  const testModule = {
+    index: function( foo, bar ) {},
+    foo: {}
+  };
 
-  testModule.ignoreMe = (foo, boop) => {}; // jshint ignore: line
+  const nyce = Nyce();
+  testModule.ignoreMe = (beep) => {}; // jshint ignore: line
 
   nyce
-    .define('resource2', testInterface)
+    .define('resource5', testInterface)
     .then(() => {
-      return nyce.assertImplements('resource2', testModule);
+      return nyce.assertImplements('resource5', testModule);
     })
     .then(() => {
       t.pass('validation was valid when unknown properties exist.');
@@ -152,15 +184,18 @@ test('Successfully invalidates an invalid interface', (t) => {
   t.plan(2);
 
   const testInterface = mock('interface');
-  const testModule = mock('implementation');
+  const testModule = {
+    index: function( foo, bar ) {},
+    foo: {}
+  };
   const nyce = Nyce();
   // remove a required field from the interface
   delete testModule.foo;
 
   nyce
-    .define('resource3', testInterface)
-    .then((schema) => {
-      return nyce.assertImplements('resource3', testModule);
+    .define('resource6', testInterface)
+    .then(() => {
+      return nyce.assertImplements('resource6', testModule);
     })
     .then(() => {
       t.fail('Should not have successully validate this module');
