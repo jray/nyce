@@ -1,7 +1,7 @@
 
 # nyce
 
-[![Circle CI](https://circleci.com/gh/recursivefunk/nyce.png?circle-token=b1d0d5b046161f60cc5816afb82b741db7163344)](https://circleci.com/gh/recursivefunk/nyce)
+[![Circle CI](https://circleci.com/gh/recursivefunk/nyce.png?circle-token=bad6c12dbdb5c68a744e9499c4303029aed34a55)](https://circleci.com/gh/recursivefunk/nyce)
 
 ### JavaScript component interface definition and adherence utility
 
