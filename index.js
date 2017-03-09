@@ -1,59 +1,59 @@
 
-'use strict';
+'use strict'
 
-const P = require('bluebird');
-const component = require('stampit');
-const schemaBuilder = require('./lib/schemaBuilder');
-const validate = require('./lib/validate');
+const P = require('bluebird')
+const component = require('stampit')
+const schemaBuilder = require('./lib/schemaBuilder')
+const validate = require('./lib/validate')
 
 module.exports = () => {
 
   return component({
     methods: {
       defined() {
-        return Object.keys(this._interfaces);
+        return Object.keys(this._interfaces)
       },
 
       isDefined(name) {
-        return (Object.keys(this._interfaces).indexOf(name) > -1);
+        return (Object.keys(this._interfaces).indexOf(name) > -1)
       },
 
       assertImplements(type, potentialImpl) {
-        const resolver = P.pending();
-        const schema = this._interfaces[ type ];
+        return new Promise((resolve, reject) => {
+          const schema = this._interfaces[ type ]
+          if (schema) {
+            validate(potentialImpl, schema)
+              .then((val) => resolve(val))
+              .catch((err) => reject(err))
+          } else {
+            reject(`Unknown Type: '${type}'`)
+          }
+        })
+      },
 
-        if (schema) {
-          return validate(potentialImpl, schema);
-        } else {
-          process.nextTick(() => resolver.reject(`Unknown Type: '${type}'`));
-        }
-        return resolver.promise;
+      check(type, impl) {
+        return this.assertImplements(type, impl)
       },
 
       define(name, definition) {
-        const self = this;
-        const resolver = P.pending();
-
-        if (this._interfaces[ name ]) {
-          process.nextTick(() => {
-            resolver.reject(
-              `You are attempting to redefine interface '${name}'`
-            );
-          });
-        } else {
-          schemaBuilder(definition)
-            .then((schema) => {
-              self._interfaces[ name ] = schema;
-              resolver.resolve(schema);
-            })
-            .catch((e) => resolver.reject(e));
-        }
-        return resolver.promise;
-      }
+        const self = this
+        return new Promise((resolve, reject) => {
+          if (this._interfaces[ name ]) {
+            reject(Error(`You are attempting to redefine interface '${name}'`))
+          } else {
+            schemaBuilder(definition)
+              .then((schema) => {
+                self._interfaces[ name ] = schema
+                resolve(schema)
+              })
+              .catch((e) => reject(e))
+          }
+        })
+      } // end define()
     }
   })
   .refs({
     _interfaces: {}
-  }).create();
+  }).create()
 
-};
+}

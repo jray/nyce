@@ -1,6 +1,6 @@
 {
   "name": "nyce",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "JavaScript component interface definition and adherence utility",
   "main": "index.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git://github.com/recursivefunk/nyce.git"
   },
   "scripts": {
-    "test": "node test/test.js"
+    "test": "ava"
   },
   "keywords": [
     "component",
@@ -18,16 +18,14 @@
   "author": "Johnny Ray Austin <johnny@johnnyray.me>",
   "license": "MIT",
   "devDependencies": {
-    "tape": "^4.0.1"
+    "ava": "^0.18.2"
   },
   "dependencies": {
-    "bluebird": "^2.9.34",
-    "joi": "^7.1.0",
-    "stampit": "^2.1.1"
+    "bluebird": "^3.5.0",
+    "joi": "^10.2.2",
+    "stampit": "^3.1.2"
   },
-  "engineStrict": true,
   "engines": {
-    "npm": "3.3.3",
-    "node": "4.2.1"
+    "node": ">=4"
   }
 }
