@@ -10,17 +10,18 @@ module.exports = () => {
 
   return component({
     methods: {
+
       defined() {
-        return Object.keys(this._interfaces)
+        return Array.from(this._interfaces.keys())
       },
 
       isDefined(name) {
-        return (Object.keys(this._interfaces).indexOf(name) > -1)
+        return this._interfaces.has(name)
       },
 
       assertImplements(type, potentialImpl) {
         return new Promise((resolve, reject) => {
-          const schema = this._interfaces[ type ]
+          const schema = this._interfaces.get(type)
           if (schema) {
             validate(potentialImpl, schema)
               .then((val) => resolve(val))
@@ -38,12 +39,12 @@ module.exports = () => {
       define(name, definition) {
         const self = this
         return new Promise((resolve, reject) => {
-          if (this._interfaces[ name ]) {
+          if (this._interfaces.has(name)) {
             reject(Error(`You are attempting to redefine interface '${name}'`))
           } else {
             schemaBuilder(definition)
               .then((schema) => {
-                self._interfaces[ name ] = schema
+                self._interfaces.set(name, schema)
                 resolve(schema)
               })
               .catch((e) => reject(e))
@@ -53,7 +54,7 @@ module.exports = () => {
     }
   })
   .refs({
-    _interfaces: {}
+    _interfaces: new Map()
   }).create()
 
 }
