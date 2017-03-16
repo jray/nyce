@@ -16,6 +16,7 @@ test('Successfully define an interface', async t => {
   const testInterface = mock('interface')
   await t.notThrows(Nyce().define('resource', testInterface))
 })
+
 test('Fail to redefine an interface', async t => {
   const testInterface = mock('interface')
   const nyce = Nyce()
@@ -24,6 +25,16 @@ test('Fail to redefine an interface', async t => {
   await nyce.define('resource', testInterface)
   err = await t.throws(nyce.define('resource', testInterface))
   t.is(err.message, `You are attempting to redefine interface 'resource'`)
+})
+
+test('Successfully force an interface redefinition', async t => {
+  const testInterface = mock('interface')
+  const nyce = Nyce()
+  const forceRedefine = true
+  let err
+
+  await nyce.define('resource', testInterface)
+  await t.notThrows(nyce.define('resource', testInterface, true))
 })
 
 test.serial('Successfully validate a valid interface', async t => {

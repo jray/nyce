@@ -36,10 +36,10 @@ module.exports = () => {
         return this.assertImplements(type, impl)
       },
 
-      define(name, definition) {
+      define(name, definition, forceRedefine) {
         const self = this
         return new Promise((resolve, reject) => {
-          if (this._interfaces.has(name)) {
+          if (this._interfaces.has(name) && !forceRedefine) {
             reject(Error(`You are attempting to redefine interface '${name}'`))
           } else {
             schemaBuilder(definition)
