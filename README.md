@@ -5,17 +5,17 @@
 
 ### JavaScript component interface definition and adherence utility
 
+Component.js
+
 ```javascript
+exports.index = (foo, bar) => { /* ... */ }
+exports.aProp = {}
+```
 
-// in someModule.js
-exports.index = (foo, bar) => { /* ... */ };
-exports.aProp = {};
+ComponentInterface.js
 
-// elsewhere
-const nyce = require('nyce')();
-const someModule = require('./someModule');
-
-const myInterface = {
+```javascript
+module.exports = {
   index: {
     type: 'function',
     args: [ 'foo', 'bar' ],
@@ -28,16 +28,25 @@ const myInterface = {
   aProp: {
     type: 'object'
   }
-};
+}
+
+```
+
+Elsewhere
+
+```javascript
+const nyce = require('nyce')()
+const impl = require('./Component')
+const interface = require('./ComponentInterface')
 
 nyce
-  .define('resource', myInterface)
-  .then(nyce.assertImplements('resource', someModule))
+  .define('resource', interface)
+  .then(nyce.assertImplements('resource', impl))
   .then(() => {
-    console.log( 'yay!' );
+    console.log( 'yay!' )
   })
   .catch((e) => {
     console.log('oh no!')
-  });
+  })
 
 ```

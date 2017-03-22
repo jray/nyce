@@ -38,7 +38,6 @@ test('Successfully force an interface redefinition', async t => {
 })
 
 test.serial('Successfully validate a valid interface', async t => {
-
   const testInterface = mock('interface')
   const testModule = mock('implementation')
   const nyce = Nyce()
@@ -48,7 +47,6 @@ test.serial('Successfully validate a valid interface', async t => {
 })
 
 test.serial('Throws error when number of arguments dont match', async t => {
-
   const testInterface = mock('interface')
   const testModule = mock('implementation')
   const nyce = Nyce()
@@ -62,7 +60,6 @@ test.serial('Throws error when number of arguments dont match', async t => {
 })
 
 test('Validates when arguments don\'t match but no args option is present', async t => {
-
   const testInterface = mock('interface')
   const testModule = mock('implementation')
   const nyce = Nyce()
@@ -75,7 +72,6 @@ test('Validates when arguments don\'t match but no args option is present', asyn
 })
 
 test('Successfully throws error when specific arguments dont match', async t => {
-
   const testInterface = mock('interface')
   const testModule = {
     index: function(foo, boop) {},
@@ -93,7 +89,6 @@ test('Successfully throws error when specific arguments dont match', async t => 
 })
 
 test('Successfully ignores unknown props', async t => {
-
   const testInterface = mock('interface')
   const testModule = {
     index: function( foo, bar ) {},
@@ -107,7 +102,6 @@ test('Successfully ignores unknown props', async t => {
 })
 
 test('Successfully invalidates an invalid interface', async t => {
-
   const testInterface = mock('interface')
   const testModule = {
     index: function( foo, bar ) {},
