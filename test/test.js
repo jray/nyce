@@ -2,12 +2,26 @@
 'use strict'
 
 const test = require('ava')
+const P = require('bluebird')
 const mock = require('./helpers')
 const Nyce = require('../index')
 const utils = require('../lib/utils')
 
 test('Successfully parses function signature', (t) => {
-  const sig = utils.parseFuncSig((foo, bar) => {})
+  let func
+  let asyncFunc
+  let sig = utils.parseFuncSig((foo, bar) => {})
+  t.is(sig[0], 'foo')
+  t.is(sig[1], 'bar')
+
+  sig = []
+  sig = utils.parseFuncSig(function(foo, bar) {})
+  t.is(sig[0], 'foo')
+  t.is(sig[1], 'bar')
+
+  sig = []
+  func = (foo, bar) => {}
+  sig = utils.parseFuncSig(func)
   t.is(sig[0], 'foo')
   t.is(sig[1], 'bar')
 })
