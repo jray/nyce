@@ -45,7 +45,7 @@ nyce
   .define('resource', interface)
   .then(nyce.assertImplements('resource', impl))
   .then(() => {
-    console.log( 'yay!' )
+    console.log('yay!')
   })
   .catch((e) => {
     console.log('oh no!')
