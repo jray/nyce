@@ -1,8 +1,7 @@
 
+'use strict'
 
-'use strict';
-
-module.exports = function( opts ) {
+module.exports = (opts) => {
   return {
     index: {
       type: 'function',
@@ -11,6 +10,5 @@ module.exports = function( opts ) {
     foo: {
       type: 'object'
     }
-  };
-};
-
+  }
+}

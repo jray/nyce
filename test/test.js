@@ -30,8 +30,6 @@ test('Fail to redefine an interface', async t => {
 test('Successfully force an interface redefinition', async t => {
   const testInterface = mock('interface')
   const nyce = Nyce()
-  const forceRedefine = true
-  let err
 
   await nyce.define('resource', testInterface)
   await t.notThrows(nyce.define('resource', testInterface, true))
@@ -74,7 +72,7 @@ test('Validates when arguments don\'t match but no args option is present', asyn
 test('Successfully throws error when specific arguments dont match', async t => {
   const testInterface = mock('interface')
   const testModule = {
-    index: function(foo, boop) {},
+    index: function (foo, boop) {},
     foo: {}
   }
   const nyce = Nyce()
@@ -91,7 +89,7 @@ test('Successfully throws error when specific arguments dont match', async t => 
 test('Successfully ignores unknown props', async t => {
   const testInterface = mock('interface')
   const testModule = {
-    index: function( foo, bar ) {},
+    index: function (foo, bar) {},
     foo: {}
   }
 
@@ -104,7 +102,7 @@ test('Successfully ignores unknown props', async t => {
 test('Successfully invalidates an invalid interface', async t => {
   const testInterface = mock('interface')
   const testModule = {
-    index: function( foo, bar ) {},
+    index: function (foo, bar) {},
     foo: {}
   }
   const nyce = Nyce()

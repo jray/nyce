@@ -1,6 +1,6 @@
 
-'use strict';
+'use strict'
 
-exports.index = function( foo, bar ) {};
+exports.index = (foo, bar) => {}
 
-exports.foo = {};
+exports.foo = {}

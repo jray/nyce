@@ -1,10 +1,10 @@
 
-'use strict';
+'use strict'
 
-module.exports = function( type, opts ) {
-  if ( type === 'interface' ) {
-    return require( './interface' )( opts );
+module.exports = (type, opts) => {
+  if (type === 'interface') {
+    return require('./interface')(opts)
   } else {
-    return require( './implementation' );
+    return require('./implementation')
   }
-};
+}
